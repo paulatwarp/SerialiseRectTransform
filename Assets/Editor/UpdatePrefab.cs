@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEditor;
 
 public static class UpdatePrefab
@@ -8,19 +9,27 @@ public static class UpdatePrefab
 	[MenuItem("Modify Prefab/Test Without Canvas")]
 	static void TestModifyPrefabWithoutCanvas()
 	{
-		using (PreviewScene preview = new PreviewScene("Resources/Background"))
+		GameObject assetRoot = Selection.activeObject as GameObject;
+		string path = AssetDatabase.GetAssetPath(assetRoot);
+		using (PreviewScene preview = new PreviewScene(path))
 		{
-			preview.gameObject.name = "ModifiedWithoutCanvas";
+			Image image = preview.gameObject.GetComponent<Image>();
+			image.color = Color.red;
 		}
 	}
 
 	[MenuItem("Modify Prefab/Test With Canvas")]
 	static void TestModifyPrefabWithCanvas()
 	{
-		Canvas canvas = AssetDatabase.LoadAssetAtPath<Canvas>("Assets/Editor/PreviewCanvas");
-		using (PreviewSceneWithCanvas preview = new PreviewSceneWithCanvas(canvas, "Resources/Background"))
+		GameObject assetRoot = Selection.activeObject as GameObject;
+		string path = AssetDatabase.GetAssetPath(assetRoot);
+		string canvasPath = "Assets/Editor/PreviewCanvas.prefab";
+		Canvas canvas = AssetDatabase.LoadAssetAtPath<Canvas>(canvasPath);
+		Debug.Assert(canvas != null, $"could not load {canvasPath}");
+		using (PreviewSceneWithCanvas preview = new PreviewSceneWithCanvas(canvas, path))
 		{
-			preview.gameObject.name = "ModifiedWithCanvas";
+			Image image = preview.gameObject.GetComponent<Image>();
+			image.color = Color.green;
 		}
 	}
 }

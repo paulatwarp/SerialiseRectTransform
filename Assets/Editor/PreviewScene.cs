@@ -12,6 +12,7 @@ public class PreviewScene : System.IDisposable
 	{
 		this.path = path;
 		gameObject = PrefabUtility.LoadPrefabContents(path);
+		Debug.Assert(gameObject != null, $"could not load {path}");
 	}
 
 	public void Dispose()
@@ -21,6 +22,10 @@ public class PreviewScene : System.IDisposable
 			bool success;
 			PrefabUtility.SaveAsPrefabAsset(gameObject, path, out success);
 			Debug.Assert(success);
+			if (success)
+			{
+				Debug.Log($"Successfully modified {path}");
+			}
 			PrefabUtility.UnloadPrefabContents(gameObject);
 		}
 	}
