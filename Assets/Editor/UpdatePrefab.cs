@@ -10,11 +10,18 @@ public static class UpdatePrefab
 	static void TestModifyPrefabWithoutCanvas()
 	{
 		GameObject assetRoot = Selection.activeObject as GameObject;
-		string path = AssetDatabase.GetAssetPath(assetRoot);
-		using (PreviewScene preview = new PreviewScene(path))
+		if (assetRoot != null)
 		{
-			Image image = preview.gameObject.GetComponent<Image>();
-			image.color = Color.red;
+			string path = AssetDatabase.GetAssetPath(assetRoot);
+			using (PreviewScene preview = new PreviewScene(path))
+			{
+				Image image = preview.gameObject.GetComponent<Image>();
+				image.color = Color.red;
+			}
+		}
+		else
+		{
+			Debug.Log("Object not selected!");
 		}
 	}
 
@@ -22,14 +29,21 @@ public static class UpdatePrefab
 	static void TestModifyPrefabWithCanvas()
 	{
 		GameObject assetRoot = Selection.activeObject as GameObject;
-		string path = AssetDatabase.GetAssetPath(assetRoot);
-		string canvasPath = "Assets/Editor/PreviewCanvas.prefab";
-		Canvas canvas = AssetDatabase.LoadAssetAtPath<Canvas>(canvasPath);
-		Debug.Assert(canvas != null, $"could not load {canvasPath}");
-		using (PreviewSceneWithCanvas preview = new PreviewSceneWithCanvas(canvas, path))
+		if (assetRoot != null)
 		{
-			Image image = preview.gameObject.GetComponent<Image>();
-			image.color = Color.green;
+			string path = AssetDatabase.GetAssetPath(assetRoot);
+			string canvasPath = "Assets/Editor/PreviewCanvas.prefab";
+			Canvas canvas = AssetDatabase.LoadAssetAtPath<Canvas>(canvasPath);
+			Debug.Assert(canvas != null, $"could not load {canvasPath}");
+			using (PreviewSceneWithCanvas preview = new PreviewSceneWithCanvas(canvas, path))
+			{
+				Image image = preview.gameObject.GetComponent<Image>();
+				image.color = Color.green;
+			}
+		}
+		else
+		{
+			Debug.Log("Object not selected!");
 		}
 	}
 }
